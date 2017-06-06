@@ -7,8 +7,8 @@ import nltk
 
 
 
-file_name_location = 'C:\\Users\\b.balcerzak\\contribution_clasificator\\Contribution_Corpus.csv'
-submission_file = 'C:\\Users\\b.balcerzak\\contribution_clasificator\\Test_set.csv'
+file_name_location = 'C:\\Users\\b.balcerzak\\contribution_clasificator\\test_new_1.csv'
+submission_file = 'C:\\Users\\b.balcerzak\\contribution_clasificator\\test_new_2.csv'
 
 
 submission_list = Input_reader.csv_data_extract(submission_file)
@@ -23,17 +23,23 @@ for new_submission in submission_list:
     for submission in My_input:
         submission_bow = corpus_load.calculate_vector(submission[0])
         test = corpus_load.cast_vector(new_submission[0])
+        x_submission_bow = corpus_load.calculate_vector(new_submission[0])
+        x_test = corpus_load.cast_vector(submission[0])
+#        print 'test'
         try:
-            similarity = float(1- spatial.distance.cosine(test.toarray(),submission_bow.toarray()))
+            similarity_1 = float(1- spatial.distance.cosine(test.toarray(),submission_bow.toarray()))
+            similarity_2 = float(1- spatial.distance.cosine(x_test.toarray(),x_submission_bow.toarray()))
+            similarity = similarity_1/similarity_2
             if similarity >0.0 and similarity > current_similarity:
                 current_similarity = similarity
                 current_category = submission[1]
         except:
-            None
+            print 'error'
+#    print 'becki'
     delimiter = ';'
     print current_category,delimiter ,new_submission[1], delimiter, current_similarity, present_submission
-    new_submission[1] = current_category
-    My_input.append(new_submission)
+#    new_submission[1] = current_category
+#    My_input.append(new_submission)
 #  print spatial.distance.euclidean(test,row)
 
 #print My_ouput
